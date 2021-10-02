@@ -4,7 +4,7 @@ library(data.table)
 data.all <- read_excel(path = "data/allDataProc_20012021.xlsx")
 data.all <- data.table(data.all)
 data.all$Area
-
+data.all$year <- year(data.all$Date)
 nYears <- length(unique(data.all$year))
 
 #plot1 nNestMonthFemale
