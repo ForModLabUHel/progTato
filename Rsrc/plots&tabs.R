@@ -8,7 +8,7 @@ data.all <- data.table(data.all)
 # data.all$Area
 
 ###proc data
-years <- 2015:2020
+years <- 2015:2021
 data.all[Specie %in% c("lo","Lo")]$Specie <- "LO"
 data.all[Specie %in% "Ei"]$Specie <- "EI"
 data.all$CCL <- as.numeric(data.all$CCL)
@@ -26,14 +26,14 @@ nYears <- length(unique(data.all$year))
 # hist(data.all$month)
 meanNnestMonth <- data.all[,sum(Nest)/nYears,by=.(month)]
 meanNnestMonth$monthID <- match(meanNnestMonth$month,c(7:12,1:6))
-nNestMonth <- data.all[,sum(Nest),by=.(month,year)]
+nNestMonth <- data.all[,sum(Nest),by=.(month,Season)]
 nNestMonth$monthID <- match(nNestMonth$month,c(7:12,1:6))
 
 p1 <- ggplot(meanNnestMonth, aes(x=as.factor(monthID),y=V1)) + 
   geom_bar(stat="identity") + 
   ylab("number of nests") + xlab("months") + 
   guides(color=guide_legend(title="Season")) +
-  geom_line(data=nNestMonth, aes(x=monthID,y=V1,col=as.factor(year))) + 
+  geom_line(data=nNestMonth, aes(x=monthID,y=V1,col=as.factor(Season))) + 
    scale_x_discrete(breaks=as.character(1:12),
     labels=c("Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun"))
 p1
@@ -44,7 +44,7 @@ p1
 #plot2 nNestMonthBySpecies
 meanNnestMonth <- data.all[,sum(Nest)/nYears,by=.(month,Specie)]
 meanNnestMonth$monthID <- match(meanNnestMonth$month,c(7:12,1:6))
-nNestMonth <- data.all[,sum(Nest),by=.(month,year,Specie)]
+nNestMonth <- data.all[,sum(Nest),by=.(month,Season,Specie)]
 nNestMonth$monthID <- match(nNestMonth$month,c(7:12,1:6))
 p2 <- list()
 for(sp in c("CM","DC","EI","LO")){
@@ -52,7 +52,7 @@ p2[[sp]] <- ggplot(meanNnestMonth[Specie==sp], aes(x=monthID,y=V1)) +
   geom_bar(stat="identity") + ggtitle(sp) + 
   ylab("number of nests") + xlab("months") + 
   guides(color=guide_legend(title="Season")) +
-  geom_line(data=nNestMonth[Specie==sp], aes(x=monthID,y=V1,col=as.factor(year))) +
+  geom_line(data=nNestMonth[Specie==sp], aes(x=monthID,y=V1,col=as.factor(Season))) +
   scale_x_continuous(breaks=1:12,
   labels=c("Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun")) +
   theme(axis.text.x = element_text(angle=90))
@@ -73,12 +73,12 @@ ggarrange(p3[[1]],p3[[2]],p3[[3]],p3[[4]])
 ####tables
 ###CCL
 CCLtab <- data.table()
-CCLtab <- data.all[,min(CCL,na.rm=T),by=.(year,Specie)]
+CCLtab <- data.all[,min(CCL,na.rm=T),by=.(Season,Specie)]
 setnames(CCLtab,"V1","min")
-CCLtab$max <- data.all[,max(CCL,na.rm=T),by=.(year,Specie)]$V1
-CCLtab$mean <- data.all[,mean(CCL,na.rm=T),by=.(year,Specie)]$V1
-CCLtab$median <- data.all[,median(CCL,na.rm=T),by=.(year,Specie)]$V1
-CCLtab$sd <- data.all[,sd(CCL,na.rm=T),by=.(year,Specie)]$V1
+CCLtab$max <- data.all[,max(CCL,na.rm=T),by=.(Season,Specie)]$V1
+CCLtab$mean <- data.all[,mean(CCL,na.rm=T),by=.(Season,Specie)]$V1
+CCLtab$median <- data.all[,median(CCL,na.rm=T),by=.(Season,Specie)]$V1
+CCLtab$sd <- data.all[,sd(CCL,na.rm=T),by=.(Season,Specie)]$V1
 CCLtabAll <- data.table()
 CCLtabAll <- data.all[,min(CCL,na.rm=T),by=.(Specie)]
 setnames(CCLtabAll,"V1","min")
@@ -90,12 +90,12 @@ CCLtabAll$sd <- data.all[,sd(CCL,na.rm=T),by=.(Specie)]$V1
 
 ###Clutch size
 Clutchtab <- data.table()
-Clutchtab <- data.all[Nest==1,min(TotalEggs,na.rm=T),by=.(year,Specie)]
+Clutchtab <- data.all[Nest==1,min(TotalEggs,na.rm=T),by=.(Season,Specie)]
 setnames(Clutchtab,"V1","min")
-Clutchtab$max <- data.all[Nest==1,max(TotalEggs,na.rm=T),by=.(year,Specie)]$V1
-Clutchtab$mean <- data.all[Nest==1,mean(TotalEggs,na.rm=T),by=.(year,Specie)]$V1
-Clutchtab$median <- data.all[Nest==1,median(TotalEggs,na.rm=T),by=.(year,Specie)]$V1
-Clutchtab$sd <- data.all[Nest==1,sd(TotalEggs,na.rm=T),by=.(year,Specie)]$V1
+Clutchtab$max <- data.all[Nest==1,max(TotalEggs,na.rm=T),by=.(Season,Specie)]$V1
+Clutchtab$mean <- data.all[Nest==1,mean(TotalEggs,na.rm=T),by=.(Season,Specie)]$V1
+Clutchtab$median <- data.all[Nest==1,median(TotalEggs,na.rm=T),by=.(Season,Specie)]$V1
+Clutchtab$sd <- data.all[Nest==1,sd(TotalEggs,na.rm=T),by=.(Season,Specie)]$V1
 ClutchtabAll <- data.table()
 ClutchtabAll <- data.all[Nest==1,min(TotalEggs,na.rm=T),by=.(Specie)]
 setnames(ClutchtabAll,"V1","min")
