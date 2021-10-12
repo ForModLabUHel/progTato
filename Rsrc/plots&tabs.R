@@ -8,7 +8,8 @@ data.all <- data.table(data.all)
 # data.all$Area
 
 ###proc data
-years <- 2015:2021
+seasons <- c("S1415","S1516","S1617","S1718","S1819",
+             "S1920","S2021")
 data.all[Specie %in% c("lo","Lo")]$Specie <- "LO"
 data.all[Specie %in% "Ei"]$Specie <- "EI"
 data.all$CCL <- as.numeric(data.all$CCL)
@@ -17,14 +18,14 @@ data.all$TotalEggs <- as.numeric(data.all$TotalEggs)
 data.all$Date <- as.Date(data.all$Date)
 data.all$month <- month(data.all$Date)
 data.all$year <- year(data.all$Date)
-data.all <- data.all[year %in% years]
-nYears <- length(unique(data.all$year))
+data.all <- data.all[Season %in% seasons]
+nSeason <- length(unique(data.all$Season))
 
 
 
 #plot1 nNestMonthFemale
 # hist(data.all$month)
-meanNnestMonth <- data.all[,sum(Nest)/nYears,by=.(month)]
+meanNnestMonth <- data.all[,sum(Nest)/nSeason,by=.(month)]
 meanNnestMonth$monthID <- match(meanNnestMonth$month,c(7:12,1:6))
 nNestMonth <- data.all[,sum(Nest),by=.(month,Season)]
 nNestMonth$monthID <- match(nNestMonth$month,c(7:12,1:6))
@@ -42,7 +43,7 @@ p1
 
 
 #plot2 nNestMonthBySpecies
-meanNnestMonth <- data.all[,sum(Nest)/nYears,by=.(month,Specie)]
+meanNnestMonth <- data.all[,sum(Nest)/nSeason,by=.(month,Specie)]
 meanNnestMonth$monthID <- match(meanNnestMonth$month,c(7:12,1:6))
 nNestMonth <- data.all[,sum(Nest),by=.(month,Season,Specie)]
 nNestMonth$monthID <- match(nNestMonth$month,c(7:12,1:6))
