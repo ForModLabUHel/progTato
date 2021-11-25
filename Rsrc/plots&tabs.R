@@ -16,10 +16,6 @@ seasons <- c("S1415","S1516","S1617","S1718","S1819",
              "S1920","S2021")
 data.all[Specie %in% c("lo","Lo")]$Specie <- "LO"
 data.all[Specie %in% "Ei"]$Specie <- "EI"
-data.all$CCL <- as.numeric(data.all$CCL)
-data.all$TotalEggs <- as.numeric(data.all$TotalEggs)
-
-data.all$Date <- as.Date(data.all$Date)
 data.all$month <- month(data.all$Date)
 data.all$year <- year(data.all$Date)
 data.all <- data.all[Season %in% seasons]
