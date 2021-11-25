@@ -3,8 +3,12 @@ library(readxl)
 library(data.table)
 library(ggpubr)
 
-data.all <- read_excel(path = "data/allDataProc_20012021.xlsx")
-data.all <- data.table(data.all)
+col_type = c(rep("text",2),"date",rep("text",5),rep("numeric",6),
+             "text",rep("numeric",3),"text","numeric","numeric",
+             "text",rep("numeric",6),"text","date","numeric")
+data.all <- read_excel(path = "data/allDataProc_20012021.xlsx",col_types =col_type)
+
+  data.all <- data.table(data.all)
 # data.all$Area
 
 ###proc data
